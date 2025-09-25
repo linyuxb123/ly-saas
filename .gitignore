@@ -1,6 +1,24 @@
 # Compiled class file
 *.class
 
+back/
+
+# Mac
+.DS_Store
+
+# Maven
+target/
+
+# AI assistant directories
+.claude/
+.codebuddy/
+.vscode/
+
+# Intellij
+.idea/
+*.iml
+*.iws
+
 # Log file
 *.log
 
