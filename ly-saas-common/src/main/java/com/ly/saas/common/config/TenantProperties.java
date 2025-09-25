@@ -1,4 +1,4 @@
-package com.ly.saas.server.config;
+package com.ly.saas.common.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -66,7 +66,7 @@ public class TenantProperties {
         /**
          * 配置刷新间隔(秒)
          */
-        private int refreshInterval = 30;
+        private int refreshInterval = 10;
 
         public boolean isEnabled() {
             return enabled;

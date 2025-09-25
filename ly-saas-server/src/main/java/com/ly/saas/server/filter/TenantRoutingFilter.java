@@ -1,7 +1,7 @@
 
 package com.ly.saas.server.filter;
 
-import com.ly.saas.server.config.TenantProperties;
+import com.ly.saas.common.config.TenantProperties;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -27,6 +28,9 @@ import java.util.Map;
 @Order(1)
 public class TenantRoutingFilter extends OncePerRequestFilter {
 
+    @Value("${server.servlet.context-path:}")
+    private String contextPath;
+
     private static final Logger log = LoggerFactory.getLogger(TenantRoutingFilter.class);
 
     @Autowired
@@ -43,7 +47,8 @@ public class TenantRoutingFilter extends OncePerRequestFilter {
         String environment = getEnvironmentForTenant(tenant);
 
         // 如果是API请求，则修改请求路径
-        if (environment != null && request.getRequestURI().startsWith("/api/")) {
+        if (environment != null && request.getRequestURI().startsWith(contextPath) &&
+                !request.getRequestURI().startsWith(contextPath + "/saas-server")) {
             // 包装请求以修改URI
             TenantAwareRequest wrappedRequest = new TenantAwareRequest(request, environment);
             filterChain.doFilter(wrappedRequest, response);

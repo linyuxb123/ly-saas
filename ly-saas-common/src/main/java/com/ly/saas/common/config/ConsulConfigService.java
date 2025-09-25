@@ -1,4 +1,4 @@
-package com.ly.saas.server.config;
+package com.ly.saas.common.config;
 
 import com.ecwid.consul.v1.ConsulClient;
 import com.ecwid.consul.v1.Response;
@@ -12,7 +12,6 @@ import org.springframework.cloud.consul.config.ConsulConfigProperties;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Base64Utils;
 import org.springframework.util.StringUtils;
 
 import jakarta.annotation.PostConstruct;

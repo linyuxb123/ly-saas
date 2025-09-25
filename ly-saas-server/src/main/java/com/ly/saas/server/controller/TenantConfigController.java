@@ -1,7 +1,7 @@
 package com.ly.saas.server.controller;
 
-import com.ly.saas.server.config.ConsulConfigService;
-import com.ly.saas.server.config.TenantProperties;
+import com.ly.saas.common.config.ConsulConfigService;
+import com.ly.saas.common.config.TenantProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +14,7 @@ import java.util.Map;
  * 提供租户环境映射配置的管理接口
  */
 @RestController
-@RequestMapping("/api/admin/tenant-config")
+@RequestMapping("/saas-server/tenant-config")
 public class TenantConfigController {
 
     @Autowired

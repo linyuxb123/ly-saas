@@ -41,6 +41,11 @@
                 <artifactId>shu-service</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.ly.saas</groupId>
+                <artifactId>ly-saas-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>

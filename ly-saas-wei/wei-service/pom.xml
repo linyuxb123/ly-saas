@@ -59,5 +59,9 @@
             <groupId>com.ly.saas</groupId>
             <artifactId>wei-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.ly.saas</groupId>
+            <artifactId>ly-saas-common</artifactId>
+        </dependency>
     </dependencies>
 </project>
