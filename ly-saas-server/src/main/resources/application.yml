@@ -14,6 +14,15 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  security:
+    user:
+      name: admin
+      password: admin123
+      roles: ADMIN
+
+jwt:
+  secret: UWTI9pThSXu2aAT1
+  expiration: 86400 # 24小时
 
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
@@ -30,12 +39,13 @@ mybatis-plus:
 
 # RocketMQ主题配置
 rocketmq:
-  name-server: 192.168.50.29:9876
+#  name-server: 192.168.50.29:9876
+  name-server: 127.0.0.1:9876
   topic:
     test: test-topic  # 测试主题
   producer:
-    access-key: admin
-    secret-key: admin
+#    access-key: admin
+#    secret-key: admin
     group: shu-producer-group
     send-message-timeout: 3000
     retry-times-when-send-failed: 2
@@ -46,8 +56,8 @@ rocketmq:
     enable-msg-trace: true
     customized-trace-topic: RMQ_SYS_TRACE_TOPIC
   consumer:
-    access-key: admin
-    secret-key: admin
+#    access-key: admin
+#    secret-key: admin
     group: shu-consumer-group
     consume-thread-max: 64
     consume-thread-min: 20

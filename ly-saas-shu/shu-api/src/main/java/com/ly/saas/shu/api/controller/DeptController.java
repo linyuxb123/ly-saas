@@ -6,6 +6,7 @@ import com.ly.saas.shu.service.DeptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public class DeptController {
      * @param dept 查询条件
      * @return 部门列表
      */
+    @PreAuthorize("hasAuthority('dept:read')")
     @GetMapping("/list")
     public ResponseEntity<List<Dept>> list(Dept dept) {
         List<Dept> depts = deptService.listDepts(dept);
@@ -39,6 +41,7 @@ public class DeptController {
      * @param dept 查询条件
      * @return 部门树结构
      */
+    @PreAuthorize("hasAuthority('dept:read')")
     @GetMapping("/tree")
     public ResponseEntity<List<Dept>> tree(Dept dept) {
         List<Dept> depts = deptService.listDepts(dept);
@@ -52,6 +55,7 @@ public class DeptController {
      * @param id 部门ID
      * @return 部门详情
      */
+    @PreAuthorize("hasAuthority('dept:read')")
     @GetMapping("/{id}")
     public ResponseEntity<Dept> getInfo(@PathVariable("id") Long id) {
         Dept dept = deptService.getById(id);
@@ -64,6 +68,7 @@ public class DeptController {
      * @param dept 部门信息
      * @return 结果
      */
+    @PreAuthorize("hasAuthority('dept:write')")
     @PostMapping
     public ResponseEntity<Boolean> add(@RequestBody Dept dept) {
         boolean result = deptService.save(dept);
@@ -76,6 +81,7 @@ public class DeptController {
      * @param dept 部门信息
      * @return 结果
      */
+    @PreAuthorize("hasAuthority('dept:write')")
     @PutMapping
     public ResponseEntity<Boolean> update(@RequestBody Dept dept) {
         boolean result = deptService.updateById(dept);
@@ -88,6 +94,7 @@ public class DeptController {
      * @param id 部门ID
      * @return 结果
      */
+    @PreAuthorize("hasAuthority('dept:write')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> remove(@PathVariable("id") Long id) {
         boolean result = deptService.removeById(id);
@@ -100,6 +107,7 @@ public class DeptController {
      * @param id 部门ID
      * @return 子部门ID列表
      */
+    @PreAuthorize("hasAuthority('dept:read')")
     @GetMapping("/child/{id}")
     public ResponseEntity<List<Long>> getChildIds(@PathVariable("id") Long id) {
         List<Long> childIds = deptService.getChildDeptIds(id);

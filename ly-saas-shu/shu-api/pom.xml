@@ -42,5 +42,6 @@
             <groupId>com.ly.saas</groupId>
             <artifactId>shu-service</artifactId>
         </dependency>
+
     </dependencies>
 </project>
