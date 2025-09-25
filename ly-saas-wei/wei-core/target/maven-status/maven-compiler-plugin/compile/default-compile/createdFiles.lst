@@ -1,0 +1,5 @@
+com/ly/saas/wei/core/constant/Constants.class
+com/ly/saas/wei/core/entity/Dept.class
+com/ly/saas/wei/core/mapper/UserMapper.class
+com/ly/saas/wei/core/mapper/DeptMapper.class
+com/ly/saas/wei/core/entity/User.class

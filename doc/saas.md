@@ -1,0 +1,11 @@
+第一版项目要求：
+0、项目使用jdk17、最新版sringboot、mybatis-plus、mysql数据库
+1、提供数据库建表文档
+2、在ly-saas-chun模块中，完成chun-api模块定义用户、部门控制器，路由前缀/chun、
+bean命名前缀chun
+3、在ly-saas-chun模块中，完成chun-core模块对用户、部门的持久化操作，bean命名前缀chun
+4、在ly-saas-chun模块中，完成chun-service模块对用户、部门的业务处理，bean命名前缀chun
+5、将上述2、3、4中的统一前缀chun，定义为配置文件中的静态常量，其他类引用该常量，
+类名不需要加chun前缀，bean需要加前缀，如：@Bean("chunUserService")
+5、在ly-saas-server模块，引入ly-saas-chun依赖，并创建spingboot启动类及配置文件，
+完成项目启动逻辑

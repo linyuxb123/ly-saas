@@ -1,0 +1,5 @@
+com/ly/saas/shu/core/entity/Dept.class
+com/ly/saas/shu/core/constant/Constants.class
+com/ly/saas/shu/core/entity/User.class
+com/ly/saas/shu/core/mapper/UserMapper.class
+com/ly/saas/shu/core/mapper/DeptMapper.class

@@ -1,0 +1,5 @@
+com/ly/saas/xia/core/mapper/UserMapper.class
+com/ly/saas/xia/core/entity/Dept.class
+com/ly/saas/xia/core/mapper/DeptMapper.class
+com/ly/saas/xia/core/constant/Constants.class
+com/ly/saas/xia/core/entity/User.class
