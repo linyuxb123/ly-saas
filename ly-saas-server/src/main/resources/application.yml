@@ -28,6 +28,32 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
 
+# RocketMQ主题配置
+rocketmq:
+  name-server: 192.168.50.29:9876
+  topic:
+    test: test-topic  # 测试主题
+  producer:
+    access-key: admin
+    secret-key: admin
+    group: shu-producer-group
+    send-message-timeout: 3000
+    retry-times-when-send-failed: 2
+    retry-times-when-send-async-failed: 0
+    compress-message-body-threshold: 4096
+    max-message-size: 4194304
+    retry-next-server: true
+    enable-msg-trace: true
+    customized-trace-topic: RMQ_SYS_TRACE_TOPIC
+  consumer:
+    access-key: admin
+    secret-key: admin
+    group: shu-consumer-group
+    consume-thread-max: 64
+    consume-thread-min: 20
+    enable-msg-trace: true
+    customized-trace-topic: RMQ_SYS_TRACE_TOPIC
+
 logging:
   level:
     com.ly.saas: info

@@ -13,12 +13,12 @@ import java.util.List;
 /**
  * 部门控制器
  */
-@RestController("shuDeptController")
+@RestController(Constants.PREFIX + "DeptController")
 @RequestMapping(Constants.API_PREFIX + "/dept")
 public class DeptController {
 
     @Autowired
-    @Qualifier("shuDeptService")
+    @Qualifier(Constants.PREFIX + "DeptService")
     private DeptService deptService;
 
     /**
@@ -53,7 +53,7 @@ public class DeptController {
      * @return 部门详情
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Dept> getInfo(@PathVariable("id")  Long id) {
+    public ResponseEntity<Dept> getInfo(@PathVariable("id") Long id) {
         Dept dept = deptService.getById(id);
         return ResponseEntity.ok(dept);
     }
@@ -89,7 +89,7 @@ public class DeptController {
      * @return 结果
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> remove(@PathVariable("id")  Long id) {
+    public ResponseEntity<Boolean> remove(@PathVariable("id") Long id) {
         boolean result = deptService.removeById(id);
         return ResponseEntity.ok(result);
     }

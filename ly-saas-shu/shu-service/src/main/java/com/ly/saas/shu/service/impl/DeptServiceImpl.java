@@ -2,6 +2,7 @@ package com.ly.saas.shu.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ly.saas.shu.core.constant.Constants;
 import com.ly.saas.shu.core.entity.Dept;
 import com.ly.saas.shu.core.mapper.DeptMapper;
 import com.ly.saas.shu.service.DeptService;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 /**
  * 部门服务实现类
  */
-@Service("shuDeptService")
+@Service(Constants.PREFIX + "DeptService")
 public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements DeptService {
 
     @Override
