@@ -32,7 +32,13 @@ logging:
   level:
     com.ly.saas: debug
 
-# 租户到环境映射配置
+# 租户到环境映射配置 (本地配置作为备份，优先从Consul获取)
 tenant:
-  mapping: '{"dingding":"wei","qiwei":"wu","huawei":"shu"}'
+  mapping:
+    dingding: wei
+    qiwei: wu
+    huawei: shu
   default-environment: shu
+  config:
+    enabled: true  # 是否启用Consul配置
+    refresh-interval: 10  # 配置刷新间隔(秒)

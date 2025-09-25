@@ -1,12 +1,15 @@
 
 package com.ly.saas.server.filter;
 
+import com.ly.saas.server.config.TenantProperties;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Value;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -24,12 +27,10 @@ import java.util.Map;
 @Order(1)
 public class TenantRoutingFilter extends OncePerRequestFilter {
 
-    // 修正注解语法，使用正确的 SpEL 表达式
-    @Value("#{${tenant.mapping}}")
-    private Map<String, String> tenantMapping;
+    private static final Logger log = LoggerFactory.getLogger(TenantRoutingFilter.class);
 
-    @Value("${tenant.default-environment:wei}")
-    private String defaultEnvironment;
+    @Autowired
+    private TenantProperties tenantProperties;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -59,12 +60,20 @@ public class TenantRoutingFilter extends OncePerRequestFilter {
      */
     private String getEnvironmentForTenant(String tenant) {
         if (tenant == null || tenant.isEmpty()) {
-            return defaultEnvironment;
+            return tenantProperties.getDefaultEnvironment();
         }
 
         // 根据配置映射获取环境
+        Map<String, String> tenantMapping = tenantProperties.getMapping();
         String environment = tenantMapping.get(tenant);
-        return environment != null ? environment : defaultEnvironment;
+        
+        if (environment != null) {
+            log.debug("租户 [{}] 映射到环境: {}", tenant, environment);
+            return environment;
+        } else {
+            log.debug("租户 [{}] 未找到映射，使用默认环境: {}", tenant, tenantProperties.getDefaultEnvironment());
+            return tenantProperties.getDefaultEnvironment();
+        }
     }
 
     /**
