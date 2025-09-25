@@ -39,6 +39,13 @@ public class UserController {
         return ResponseEntity.ok(userPage);
     }
 
+    @GetMapping("/allUsers")
+    public ResponseEntity<List<User>> allUsers() {
+        log.info(Constants.PREFIX + "获取所有用户列表");
+        List<User> allUsers = userService.allUsers();
+        return ResponseEntity.ok(allUsers);
+    }
+
     /**
      * 获取用户详情
      *

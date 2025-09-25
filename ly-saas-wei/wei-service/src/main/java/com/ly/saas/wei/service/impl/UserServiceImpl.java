@@ -56,6 +56,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    public List<User> allUsers() {
+        log.info(Constants.PREFIX + "获取所有用户列表");
+        return super.getBaseMapper().allUsers();
+    }
+
+    @Override
     public List<User> listByDeptId(Long deptId) {
         if (deptId == null) {
             return null;

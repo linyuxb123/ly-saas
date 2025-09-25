@@ -23,7 +23,7 @@ public class StartJob {
     @Autowired
     private TenantProperties tenantProperties;
 
-    @Scheduled(fixedDelay = 10 * 1000) // 每30秒执行一次
+    @Scheduled(fixedDelay = 60 * 1000) // 每30秒执行一次
     public void processLogUpdates() {
         for (Map.Entry<String, String> stringStringEntry : tenantProperties.getMapping().entrySet()) {
             if (stringStringEntry.getValue().equals(Constants.PREFIX)) {

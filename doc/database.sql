@@ -46,4 +46,6 @@ INSERT INTO saas_dept(id, dept_name, parent_id, ancestors, order_num, leader, st
 VALUES (1, '总公司', 0, '0', 0, 'admin', 1);
 
 INSERT INTO saas_user(id, username, password, real_name, email, phone, dept_id, status)
-VALUES (1, 'admin', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '管理员', 'admin@example.com', '13800138000', 1, 1);
+VALUES (1, 'admin', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '管理员', 'admin@example.com', '13800138000', 1, 1),
+VALUES (2, 'szhang', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '总监', '123456@example.com', '13800138000', 1, 1),
+VALUES (3, 'sli', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '技术', 'abcdef@example.com', '13800138000', 1, 1);
