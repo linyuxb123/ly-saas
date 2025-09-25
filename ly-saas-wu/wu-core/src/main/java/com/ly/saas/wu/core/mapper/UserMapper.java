@@ -1,6 +1,7 @@
 package com.ly.saas.wu.core.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ly.saas.wu.core.constant.Constants;
 import com.ly.saas.wu.core.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -12,7 +13,7 @@ import java.util.List;
  * 用户Mapper接口
  */
 @Mapper
-@Repository("wuUserMapper")
+@Repository(Constants.PREFIX + "UserMapper")
 public interface UserMapper extends BaseMapper<User> {
 
     @Select("SELECT * FROM saas_user")

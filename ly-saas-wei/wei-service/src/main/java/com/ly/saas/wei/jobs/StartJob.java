@@ -17,7 +17,7 @@ import java.util.Map;
  * @description
  */
 @Slf4j
-@Component("weiStartJob")
+@Component(Constants.PREFIX + "StartJob")
 @EnableScheduling
 public class StartJob {
     @Autowired

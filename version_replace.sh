@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # 0. 定义变量
-version1="wei"
-version2="shu"
+version1="shu"
+version2="wu"
 module1="ly-saas-${version1}"
 module2="ly-saas-${version2}"
 

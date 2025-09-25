@@ -15,7 +15,7 @@ import java.util.List;
  * 用户控制器
  */
 @Slf4j
-@RestController("weiUserController")
+@RestController(Constants.PREFIX + "UserController")
 @RequestMapping(Constants.API_PREFIX + "/user")
 public class UserController {
 

@@ -17,7 +17,7 @@ import java.util.List;
  * 用户服务实现类
  */
 @Slf4j
-@Service("wuUserService")
+@Service(Constants.PREFIX + "UserService")
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
     @Override
