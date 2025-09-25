@@ -26,7 +26,7 @@ public class TestMQController {
      * @return 发送结果
      */
     @GetMapping("/sync")
-    public String testSyncSend(@RequestParam String content) {
+    public String testSyncSend(@RequestParam("content") String content) {
         return testMessageProducer.sendMessage(content).toString();
     }
 
@@ -37,7 +37,7 @@ public class TestMQController {
      * @return 提示信息
      */
     @GetMapping("/async")
-    public String testAsyncSend(@RequestParam String content) {
+    public String testAsyncSend(@RequestParam("content") String content) {
         testMessageProducer.sendAsyncMessage(content);
         return "异步消息已发送，请查看日志";
     }
@@ -49,7 +49,7 @@ public class TestMQController {
      * @return 提示信息
      */
     @GetMapping("/oneway")
-    public String testOneWaySend(@RequestParam String content) {
+    public String testOneWaySend(@RequestParam("content") String content) {
         testMessageProducer.sendOneWayMessage(content);
         return "单向消息已发送，请查看日志";
     }
