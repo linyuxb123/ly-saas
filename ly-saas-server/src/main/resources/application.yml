@@ -30,7 +30,7 @@ mybatis-plus:
 
 logging:
   level:
-    com.ly.saas: debug
+    com.ly.saas: info
 
 # 租户到环境映射配置 (本地配置作为备份，优先从Consul获取)
 tenant:
