@@ -10,6 +10,8 @@ import com.ly.saas.shu.service.UserService;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -25,8 +27,13 @@ import java.util.List;
 @Service(Constants.PREFIX + "UserService")
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
-    @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Lazy
+    @Autowired
+    public void setPasswordEncoder(@Qualifier(Constants.PREFIX + "PasswordEncoder") PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @PostConstruct
     public void init() {
@@ -34,7 +41,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String adminUsername = "admin";
         String adminPassword = "admin123";
         String adminTenantId = "test-tenant";
-        
+
         if (getByUsernameAndTenantId(adminUsername, adminTenantId) == null) {
             User admin = new User();
             admin.setUsername(adminUsername);
@@ -42,7 +49,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             admin.setRealName("系统管理员");
             admin.setStatus(1);
             admin.setTenantId(adminTenantId);
-            
+
             save(admin);
             log.info("创建默认管理员用户: {}", adminUsername);
         }
@@ -98,14 +105,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         queryWrapper.eq(User::getDeptId, deptId);
         return list(queryWrapper);
     }
-    
+
     @Override
     public User getUserWithRolesAndPermissions(Long userId) {
         User user = getById(userId);
         if (user != null) {
             // 这里应该从数据库中查询用户的角色和权限
             // 由于示例中没有角色和权限表，这里模拟一些数据
-            
+
             // 模拟角色数据
             List<String> roles = new ArrayList<>();
             if ("admin".equals(user.getUsername())) {
@@ -114,7 +121,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 roles.add("USER");
             }
             user.setRoles(roles);
-            
+
             // 模拟权限数据
             List<String> permissions = new ArrayList<>();
             if ("admin".equals(user.getUsername())) {
@@ -126,7 +133,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         return user;
     }
-    
+
     @Override
     public User getByUsernameAndTenantId(String username, String tenantId) {
         if (!StringUtils.hasText(username) || !StringUtils.hasText(tenantId)) {
@@ -134,7 +141,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(User::getUsername, username)
-                   .eq(User::getTenantId, tenantId);
+                .eq(User::getTenantId, tenantId);
         return getOne(queryWrapper);
     }
 }

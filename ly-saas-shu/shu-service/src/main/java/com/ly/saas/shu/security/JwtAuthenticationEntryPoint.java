@@ -1,4 +1,4 @@
-package com.ly.saas.shu.api.security;
+package com.ly.saas.shu.security;
 
 import com.ly.saas.shu.core.constant.Constants;
 import jakarta.servlet.ServletException;

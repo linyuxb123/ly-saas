@@ -10,6 +10,7 @@ import com.ly.saas.shu.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,10 +29,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(Constants.API_PREFIX + "/auth")
 public class AuthController {
 
+    @Lazy
     @Autowired
     @Qualifier(Constants.PREFIX + "AuthenticationManager")
     private AuthenticationManager authenticationManager;
 
+    @Lazy
     @Autowired
     @Qualifier(Constants.PREFIX + "JwtTokenUtil")
     private JwtTokenUtil jwtTokenUtil;

@@ -1,12 +1,11 @@
-package com.ly.saas.shu.api.config;
+package com.ly.saas.shu.config;
 
-import com.ly.saas.shu.api.security.JwtAuthenticationEntryPoint;
-import com.ly.saas.shu.api.security.JwtAuthenticationFilter;
-import com.ly.saas.shu.api.security.TenantAwareAuthenticationFilter;
 import com.ly.saas.shu.core.constant.Constants;
+import com.ly.saas.shu.security.JwtAuthenticationEntryPoint;
+import com.ly.saas.shu.security.JwtAuthenticationFilter;
 import com.ly.saas.shu.security.SaaSUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.ly.saas.shu.security.TenantAwareAuthenticationFilter;
+import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,16 +28,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    @Autowired
-    @Qualifier(Constants.PREFIX + "SaasUserDetailsService")
+    @Resource(name = Constants.PREFIX + "SaasUserDetailsService")
     private SaaSUserDetailsService userDetailsService;
 
-    @Autowired
-    @Qualifier(Constants.PREFIX + "JwtAuthenticationEntryPoint")
+    @Resource(name = Constants.PREFIX + "JwtAuthenticationEntryPoint")
     private JwtAuthenticationEntryPoint unauthorizedHandler;
 
-    @Autowired
-    @Qualifier(Constants.PREFIX + "TenantAwareAuthenticationFilter")
+    @Resource(name = Constants.PREFIX + "TenantAwareAuthenticationFilter")
     private TenantAwareAuthenticationFilter tenantAwareAuthenticationFilter;
 
     @Bean(Constants.PREFIX + "JwtAuthenticationFilter")

@@ -1,8 +1,8 @@
-package com.ly.saas.shu.api.security;
+package com.ly.saas.shu.security;
 
 import com.ly.saas.common.config.TenantProperties;
 import com.ly.saas.shu.core.constant.Constants;
-import com.ly.saas.shu.security.SaaSUserDetailsService;
+import jakarta.annotation.Resource;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,9 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -27,7 +25,6 @@ import java.util.Map;
  */
 @Order(1)
 @Component(Constants.PREFIX + "TenantAwareAuthenticationFilter")
-@DependsOn(Constants.PREFIX + "SaaSUserDetailsService")
 public class TenantAwareAuthenticationFilter extends OncePerRequestFilter {
 
     private static final Logger log = LoggerFactory.getLogger(TenantAwareAuthenticationFilter.class);
@@ -38,8 +35,7 @@ public class TenantAwareAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private TenantProperties tenantProperties;
 
-    @Autowired
-    @Qualifier(Constants.PREFIX + "SaasUserDetailsService")
+    @Resource(name = Constants.PREFIX + "SaasUserDetailsService")
     private SaaSUserDetailsService userDetailsService;
 
     @Override

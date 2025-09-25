@@ -1,7 +1,5 @@
-package com.ly.saas.shu.api.security;
+package com.ly.saas.shu.security;
 
-import com.ly.saas.shu.security.JwtTokenUtil;
-import com.ly.saas.shu.security.SaaSUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

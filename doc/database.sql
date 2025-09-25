@@ -17,9 +17,11 @@ CREATE TABLE IF NOT EXISTS saas_user (
     update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     create_by BIGINT COMMENT '创建人',
     update_by BIGINT COMMENT '更新人',
+    tenant_id VARCHAR(50) NOT NULL DEFAULT 'default' COMMENT '租户ID',
     is_deleted TINYINT DEFAULT 0 COMMENT '是否删除：0-未删除，1-已删除',
     PRIMARY KEY (id),
-    UNIQUE KEY uk_username (username)
+    UNIQUE KEY uk_username (username),
+    INDEX idx_tenant_id (tenant_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
 
 -- 部门表
@@ -37,9 +39,23 @@ CREATE TABLE IF NOT EXISTS saas_dept (
     update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     create_by BIGINT COMMENT '创建人',
     update_by BIGINT COMMENT '更新人',
+    tenant_id VARCHAR(50) NOT NULL DEFAULT 'default' COMMENT '租户ID',
     is_deleted TINYINT DEFAULT 0 COMMENT '是否删除：0-未删除，1-已删除',
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    INDEX idx_tenant_id (tenant_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='部门表';
+
+-- 创建租户配置表
+CREATE TABLE saas_tenant_config (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    tenant_id VARCHAR(50) NOT NULL COMMENT '租户ID',
+    environment VARCHAR(50) NOT NULL COMMENT '环境名称',
+    created_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_tenant (tenant_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='租户配置表';
+
+
 
 -- 初始化数据
 INSERT INTO saas_dept(id, dept_name, parent_id, ancestors, order_num, leader, status)
@@ -49,25 +65,3 @@ INSERT INTO saas_user(id, username, password, real_name, email, phone, dept_id, 
 VALUES (1, 'admin', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '管理员', 'admin@example.com', '13800138000', 1, 1),
 VALUES (2, 'szhang', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '总监', '123456@example.com', '13800138000', 1, 1),
 VALUES (3, 'sli', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '技术', 'abcdef@example.com', '13800138000', 1, 1);
-
--- 1. 用户表添加租户字段
-ALTER TABLE saas_user
-ADD COLUMN tenant_id VARCHAR(50) NOT NULL DEFAULT 'default' COMMENT '租户ID';
-ALTER TABLE saas_user
-ADD INDEX idx_tenant_id (tenant_id);
-
--- 2. 部门表添加租户字段
-ALTER TABLE saas_dept
-ADD COLUMN tenant_id VARCHAR(50) NOT NULL DEFAULT 'default' COMMENT '租户ID';
-ALTER TABLE saas_dept
-ADD INDEX idx_tenant_id (tenant_id);
-
--- 3. 创建租户配置表
-CREATE TABLE saas_tenant_config (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    tenant_id VARCHAR(50) NOT NULL COMMENT '租户ID',
-    environment VARCHAR(50) NOT NULL COMMENT '环境名称',
-    created_time DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    UNIQUE KEY uk_tenant (tenant_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='租户配置表';
