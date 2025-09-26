@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
+import org.springframework.core.Ordered;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -20,7 +21,15 @@ import java.io.IOException;
 /**
  * JWT 认证过滤器
  */
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+public class JwtAuthenticationFilter extends OncePerRequestFilter implements Ordered {
+
+    // 设置JWT过滤器的顺序
+    private static final int FILTER_ORDER = -100;
+
+    @Override
+    public int getOrder() {
+        return FILTER_ORDER;
+    }
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
@@ -41,7 +50,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String username = jwtTokenUtil.getUsernameFromToken(jwt);
                 String tenantId = jwtTokenUtil.getTenantIdFromToken(jwt);
 
-                UserDetails userDetails = saasUserDetailsService.loadUserByUsername( username);
+                UserDetails userDetails = saasUserDetailsService.loadUserByUsername(username);
 
                 if (jwtTokenUtil.validateToken(jwt, userDetails)) {
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(

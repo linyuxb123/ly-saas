@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     @Lazy
-    @Resource(name = Constants.PREFIX + "AuthenticationManager")
+    @Resource
     private AuthenticationManager authenticationManager;
 
     @Lazy

@@ -1,5 +1,6 @@
 package com.ly.saas.server.config;
 
+import com.ly.saas.server.constant.Constants;
 import com.ly.saas.server.filter.TenantRoutingFilter;
 import com.ly.saas.server.security.JwtAuthenticationEntryPoint;
 import com.ly.saas.server.security.JwtAuthenticationFilter;
@@ -25,7 +26,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * Spring Security 配置类
  */
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 @EnableMethodSecurity
 public class SecurityConfig {
     @Value("${server.servlet.context-path:}")
@@ -70,17 +71,27 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(contextPath + "/auth/**").permitAll()
+                        // 确保路径匹配正确，同时考虑上下文路径、环境前缀和API_PREFIX
+                        // 1. 基本登录路径
+                        .requestMatchers("/api/auth/login", "/api/shu/auth/**", "/api/wei/auth/**", "/api/wu/auth/**").permitAll()
+                        // 2. 带contextPath前缀的路径
+                        .requestMatchers(contextPath + "/api/auth/login", contextPath + "/api/shu/auth/**", contextPath + "/api/wei/auth/**", contextPath + "/api/wu/auth/**").permitAll()
+                        // 3. 带contextPath和环境前缀的路径（环境前缀可能会被TenantRoutingFilter添加）
+                        .requestMatchers(contextPath + "/*/api/auth/login", contextPath + "/*/api/shu/auth/**", contextPath + "/*/api/wei/auth/**", contextPath + "/*/api/wu/auth/**").permitAll()
+                        // 4. 带API_PREFIX的路径
+                        .requestMatchers(Constants.API_PREFIX + "/auth/**").permitAll()
+                        // 5. 各模块的登录路径
+                        .requestMatchers("/shu/auth/**", "/wei/auth/**", "/wu/auth/**").permitAll()
                         .anyRequest().authenticated()
                 );
 
         http.authenticationProvider(authenticationProvider());
 
+        // 添加租户感知过滤器 - 应该在JWT过滤器之前，但不影响路径匹配
+        http.addFilterBefore(tenantRoutingFilter, UsernamePasswordAuthenticationFilter.class);
+
         // 添加JWT过滤器
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-
-        // 添加租户感知过滤器
-        http.addFilterBefore(tenantRoutingFilter, JwtAuthenticationFilter.class);
 
         return http.build();
     }
