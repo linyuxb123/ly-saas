@@ -70,8 +70,8 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(contextPath + "/**/auth/**").permitAll()
-                        .requestMatchers(contextPath + "/**/test/**").permitAll()
+                        .requestMatchers(contextPath + "/*/auth/**").permitAll()
+                        .requestMatchers(contextPath + "/*/test/**").permitAll()
                         .anyRequest().authenticated()
                 );
 

@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8081
   servlet:
     context-path: /api
 
@@ -40,7 +40,7 @@ mybatis-plus:
 # RocketMQ主题配置
 rocketmq:
 #  name-server: 192.168.50.29:9876
-  name-server: 127.0.0.1:9876
+  name-server: localhost:9876
   topic:
     test: test-topic  # 测试主题
   producer:

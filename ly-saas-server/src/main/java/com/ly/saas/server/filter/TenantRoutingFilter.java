@@ -1,4 +1,3 @@
-
 package com.ly.saas.server.filter;
 
 import com.ly.saas.common.config.TenantHolder;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * @author linyuxb
