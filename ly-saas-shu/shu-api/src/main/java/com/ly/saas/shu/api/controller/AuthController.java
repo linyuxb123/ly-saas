@@ -7,6 +7,7 @@ import com.ly.saas.shu.security.SaaSUserDetails;
 import com.ly.saas.shu.security.dto.AuthRequest;
 import com.ly.saas.shu.security.dto.AuthResponse;
 import com.ly.saas.shu.service.UserService;
+import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -25,13 +26,12 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 认证控制器
  */
-@RestController
+@RestController(Constants.PREFIX + "AuthController")
 @RequestMapping(Constants.API_PREFIX + "/auth")
 public class AuthController {
 
     @Lazy
-    @Autowired
-    @Qualifier(Constants.PREFIX + "AuthenticationManager")
+    @Resource(name = Constants.PREFIX + "AuthenticationManager")
     private AuthenticationManager authenticationManager;
 
     @Lazy
@@ -44,7 +44,6 @@ public class AuthController {
     private UserService userService;
 
     @Autowired
-    @Qualifier(Constants.PREFIX + "PasswordEncoder")
     private PasswordEncoder passwordEncoder;
 
     /**

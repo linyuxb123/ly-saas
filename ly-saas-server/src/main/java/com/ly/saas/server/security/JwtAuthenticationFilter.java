@@ -1,5 +1,8 @@
-package com.ly.saas.shu.security;
+package com.ly.saas.server.security;
 
+import com.ly.saas.common.config.TenantProperties;
+import com.ly.saas.shu.security.JwtTokenUtil;
+import jakarta.annotation.Resource;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +26,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    private SaaSUserDetailsService userDetailsService;
+    private TenantProperties tenantProperties;
+
+    @Resource(name = "saasUserDetailsService")
+    private SaaSUserDetailsService saasUserDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -34,12 +40,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (StringUtils.hasText(jwt) && SecurityContextHolder.getContext().getAuthentication() == null) {
                 String username = jwtTokenUtil.getUsernameFromToken(jwt);
                 String tenantId = jwtTokenUtil.getTenantIdFromToken(jwt);
-                
-                // 设置当前租户ID
-                userDetailsService.setCurrentTenantId(tenantId);
-                
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-                
+
+                UserDetails userDetails = saasUserDetailsService.loadUserByUsername( username);
+
                 if (jwtTokenUtil.validateToken(jwt, userDetails)) {
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                             userDetails, null, userDetails.getAuthorities());

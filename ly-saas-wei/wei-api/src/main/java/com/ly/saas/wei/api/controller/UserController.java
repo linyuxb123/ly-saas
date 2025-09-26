@@ -7,6 +7,7 @@ import com.ly.saas.wei.service.UserService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class UserController {
      * @param pageSize 每页数量
      * @return 用户列表
      */
+    @PreAuthorize("hasAuthority('user:read')")
     @GetMapping("/list")
     public ResponseEntity<Page<User>> list(User user,
                                            @RequestParam(defaultValue = "1") Integer pageNum,
@@ -39,6 +41,7 @@ public class UserController {
         return ResponseEntity.ok(userPage);
     }
 
+    @PreAuthorize("hasAuthority('user:read')")
     @GetMapping("/allUsers")
     public ResponseEntity<List<User>> allUsers() {
         log.info(Constants.PREFIX + "获取所有用户列表");
@@ -52,6 +55,7 @@ public class UserController {
      * @param id 用户ID
      * @return 用户详情
      */
+    @PreAuthorize("hasAuthority('user:read')")
     @GetMapping("/{id}")
     public ResponseEntity<User> getInfo(@PathVariable("id") Long id) {
         log.info(Constants.PREFIX + "获取用户详情，用户ID：{}", id);
@@ -65,6 +69,7 @@ public class UserController {
      * @param user 用户信息
      * @return 结果
      */
+    @PreAuthorize("hasAuthority('user:write')")
     @PostMapping
     public ResponseEntity<Boolean> add(@RequestBody User user) {
         boolean result = userService.save(user);
@@ -77,6 +82,7 @@ public class UserController {
      * @param user 用户信息
      * @return 结果
      */
+    @PreAuthorize("hasAuthority('user:write')")
     @PutMapping
     public ResponseEntity<Boolean> update(@RequestBody User user) {
         boolean result = userService.updateById(user);
@@ -89,6 +95,7 @@ public class UserController {
      * @param id 用户ID
      * @return 结果
      */
+    @PreAuthorize("hasAuthority('user:write')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> remove(@PathVariable("id") Long id) {
         boolean result = userService.removeById(id);
@@ -101,6 +108,7 @@ public class UserController {
      * @param deptId 部门ID
      * @return 用户列表
      */
+    @PreAuthorize("hasAuthority('user:read')")
     @GetMapping("/dept/{deptId}")
     public ResponseEntity<List<User>> listByDeptId(@PathVariable("deptId") Long deptId) {
         List<User> users = userService.listByDeptId(deptId);

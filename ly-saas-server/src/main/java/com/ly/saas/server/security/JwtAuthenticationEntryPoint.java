@@ -1,6 +1,5 @@
-package com.ly.saas.shu.security;
+package com.ly.saas.server.security;
 
-import com.ly.saas.shu.core.constant.Constants;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,7 +13,7 @@ import java.io.IOException;
  * JWT 认证入口点
  * 处理认证异常
  */
-@Component(Constants.PREFIX + "JwtAuthenticationEntryPoint")
+@Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override

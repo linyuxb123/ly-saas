@@ -1,5 +1,6 @@
 package com.ly.saas.shu.security;
 
+import com.ly.saas.common.config.TenantHolder;
 import com.ly.saas.shu.core.entity.User;
 import com.ly.saas.shu.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import com.ly.saas.shu.core.constant.Constants;
 
+import java.util.Objects;
+
 /**
  * 自定义 UserDetailsService 实现类
  */
@@ -19,8 +22,6 @@ import com.ly.saas.shu.core.constant.Constants;
 public class SaaSUserDetailsService implements UserDetailsService {
 
     private UserService userService;
-
-    private String currentTenantId;
 
     @Lazy
     @Autowired
@@ -36,21 +37,14 @@ public class SaaSUserDetailsService implements UserDetailsService {
         }
 
         // 检查用户是否属于当前租户
-        if (currentTenantId != null && !currentTenantId.equals(user.getTenantId())) {
+        if (Objects.equals(TenantHolder.getTenantCode(), user.getTenantId())) {
             throw new UsernameNotFoundException("用户不属于当前租户");
         }
 
         // 加载用户角色和权限
         user = userService.getUserWithRolesAndPermissions(user.getId());
 
-        return new SaaSUserDetails(user, currentTenantId);
+        return new SaaSUserDetails(user, user.getTenantId());
     }
 
-    public void setCurrentTenantId(String tenantId) {
-        this.currentTenantId = tenantId;
-    }
-
-    public String getCurrentTenantId() {
-        return currentTenantId;
-    }
 }

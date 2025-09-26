@@ -2,7 +2,7 @@
 
 # 0. 定义变量
 version1="shu"
-version2="wu"
+version2="wei"
 module1="ly-saas-${version1}"
 module2="ly-saas-${version2}"
 

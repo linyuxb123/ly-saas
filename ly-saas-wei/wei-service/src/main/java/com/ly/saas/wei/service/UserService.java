@@ -42,4 +42,21 @@ public interface UserService extends IService<User> {
      * @return 用户列表
      */
     List<User> listByDeptId(Long deptId);
+    
+    /**
+     * 获取用户的角色和权限信息
+     *
+     * @param userId 用户ID
+     * @return 包含角色和权限的用户信息
+     */
+    User getUserWithRolesAndPermissions(Long userId);
+    
+    /**
+     * 根据用户名和租户ID查询用户
+     *
+     * @param username 用户名
+     * @param tenantId 租户ID
+     * @return 用户信息
+     */
+    User getByUsernameAndTenantId(String username, String tenantId);
 }

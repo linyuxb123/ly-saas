@@ -1,11 +1,12 @@
-package com.ly.saas.shu.config;
+package com.ly.saas.server.config;
 
+import com.ly.saas.server.filter.TenantRoutingFilter;
+import com.ly.saas.server.security.SaaSUserDetailsService;
 import com.ly.saas.shu.core.constant.Constants;
-import com.ly.saas.shu.security.JwtAuthenticationEntryPoint;
-import com.ly.saas.shu.security.JwtAuthenticationFilter;
-import com.ly.saas.shu.security.SaaSUserDetailsService;
-import com.ly.saas.shu.security.TenantAwareAuthenticationFilter;
+import com.ly.saas.server.security.JwtAuthenticationEntryPoint;
+import com.ly.saas.server.security.JwtAuthenticationFilter;
 import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,15 +28,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+    @Value("${server.servlet.context-path:}")
+    private String contextPath;
 
-    @Resource(name = Constants.PREFIX + "SaasUserDetailsService")
+    @Resource(name = "saasUserDetailsService")
     private SaaSUserDetailsService userDetailsService;
 
-    @Resource(name = Constants.PREFIX + "JwtAuthenticationEntryPoint")
+    @Resource
     private JwtAuthenticationEntryPoint unauthorizedHandler;
 
-    @Resource(name = Constants.PREFIX + "TenantAwareAuthenticationFilter")
-    private TenantAwareAuthenticationFilter tenantAwareAuthenticationFilter;
+    @Resource
+    private TenantRoutingFilter tenantRoutingFilter;
 
     @Bean(Constants.PREFIX + "JwtAuthenticationFilter")
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
@@ -55,20 +58,20 @@ public class SecurityConfig {
         return authConfig.getAuthenticationManager();
     }
 
-    @Bean(Constants.PREFIX + "PasswordEncoder")
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
+    @Bean(Constants.PREFIX + "SecurityFilterChain")
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(Constants.API_PREFIX + "/auth/**").permitAll()
-                        .requestMatchers(Constants.API_PREFIX + "/test/**").permitAll()
+                        .requestMatchers(contextPath + "/**/auth/**").permitAll()
+                        .requestMatchers(contextPath + "/**/test/**").permitAll()
                         .anyRequest().authenticated()
                 );
 
@@ -78,7 +81,7 @@ public class SecurityConfig {
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         // 添加租户感知过滤器
-        http.addFilterBefore(tenantAwareAuthenticationFilter, JwtAuthenticationFilter.class);
+        http.addFilterBefore(tenantRoutingFilter, JwtAuthenticationFilter.class);
 
         return http.build();
     }
