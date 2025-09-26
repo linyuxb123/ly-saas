@@ -40,7 +40,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 创建默认管理员用户
         String adminUsername = "admin";
         String adminPassword = "admin123";
-        String adminTenantId = "test-tenant";
+        String adminTenantId = "huawei";
 
         if (getByUsernameAndTenantId(adminUsername, adminTenantId) == null) {
             User admin = new User();

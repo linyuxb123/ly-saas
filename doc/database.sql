@@ -4,6 +4,7 @@ CREATE DATABASE IF NOT EXISTS ly_saas DEFAULT CHARACTER SET utf8mb4 COLLATE utf8
 USE ly_saas;
 
 -- 用户表
+DROP TABLE IF EXISTS saas_user;
 CREATE TABLE IF NOT EXISTS saas_user (
     id BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     username VARCHAR(50) NOT NULL COMMENT '用户名',
@@ -20,11 +21,12 @@ CREATE TABLE IF NOT EXISTS saas_user (
     tenant_id VARCHAR(50) NOT NULL DEFAULT 'default' COMMENT '租户ID',
     is_deleted TINYINT DEFAULT 0 COMMENT '是否删除：0-未删除，1-已删除',
     PRIMARY KEY (id),
-    UNIQUE KEY uk_username (username),
+    UNIQUE KEY uk_username_tenant (username, tenant_id),
     INDEX idx_tenant_id (tenant_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
 
 -- 部门表
+DROP TABLE IF EXISTS saas_dept;
 CREATE TABLE IF NOT EXISTS saas_dept (
     id BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     dept_name VARCHAR(50) NOT NULL COMMENT '部门名称',
@@ -46,6 +48,7 @@ CREATE TABLE IF NOT EXISTS saas_dept (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='部门表';
 
 -- 创建租户配置表
+DROP TABLE IF EXISTS saas_tenant_config;
 CREATE TABLE saas_tenant_config (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     tenant_id VARCHAR(50) NOT NULL COMMENT '租户ID',

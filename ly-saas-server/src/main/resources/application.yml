@@ -21,7 +21,7 @@ spring:
       roles: ADMIN
 
 jwt:
-  secret: UWTI9pThSXu2aAT1
+  secret: mtVMObZlD4Fz6V3wpwuHvJWFrnSoTLel
   expiration: 86400 # 24小时
 
 mybatis-plus:
