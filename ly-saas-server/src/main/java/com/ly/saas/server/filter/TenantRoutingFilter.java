@@ -2,6 +2,7 @@ package com.ly.saas.server.filter;
 
 import com.ly.saas.common.config.TenantHolder;
 import com.ly.saas.common.config.TenantProperties;
+import com.ly.saas.server.constant.Constants;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -52,9 +53,14 @@ public class TenantRoutingFilter extends OncePerRequestFilter {
 
         // 如果是API请求，则修改请求路径
         if (environment != null && request.getRequestURI().startsWith(contextPath) &&
-                !request.getRequestURI().startsWith(contextPath + "/saas-server")) {
+                // 排除API请求，因为API请求已经包含环境前缀
+                !request.getRequestURI().startsWith(contextPath + Constants.API_PREFIX) &&
+                !request.getRequestURI().startsWith(contextPath + com.ly.saas.wei.core.constant.Constants.API_PREFIX) &&
+                !request.getRequestURI().startsWith(contextPath + com.ly.saas.shu.core.constant.Constants.API_PREFIX) &&
+                !request.getRequestURI().startsWith(contextPath + com.ly.saas.wu.core.constant.Constants.API_PREFIX)
+        ) {
             // 包装请求以修改URI
-            TenantAwareRequest wrappedRequest = new TenantAwareRequest(request, environment);
+            TenantAwareRequest wrappedRequest = new TenantAwareRequest(contextPath, request, environment);
             filterChain.doFilter(wrappedRequest, response);
         } else {
             // 不需要路由修改的情况
@@ -70,18 +76,20 @@ public class TenantRoutingFilter extends OncePerRequestFilter {
 
         private final String environment;
         private final String originalUri;
+        private final String contextPath;
 
-        public TenantAwareRequest(HttpServletRequest request, String environment) {
+        public TenantAwareRequest(String contextPath, HttpServletRequest request, String environment) {
             super(request);
             this.environment = environment;
             this.originalUri = request.getRequestURI();
+            this.contextPath = contextPath;
         }
 
         @Override
         public String getRequestURI() {
             // 如果是API请求且不包含环境前缀，则添加环境前缀
-            if (originalUri.startsWith("/api/") && !originalUri.startsWith("/api/" + environment + "/")) {
-                return "/api/" + environment + originalUri.substring(4);
+            if (originalUri.startsWith(contextPath + "/") && !originalUri.startsWith(contextPath + "/" + environment + "/")) {
+                return contextPath + "/" + environment + originalUri.substring(contextPath.length());
             }
             return originalUri;
         }

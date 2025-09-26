@@ -2,6 +2,7 @@ package com.ly.saas.server.controller;
 
 import com.ly.saas.common.config.ConsulConfigService;
 import com.ly.saas.common.config.TenantProperties;
+import com.ly.saas.server.constant.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ import java.util.Map;
  * 提供租户环境映射配置的管理接口
  */
 @RestController
-@RequestMapping("/saas-server/tenant-config")
+@RequestMapping(Constants.API_PREFIX + "/tenant-config")
 public class TenantConfigController {
 
     @Autowired
@@ -36,16 +37,17 @@ public class TenantConfigController {
 
     /**
      * 更新租户环境映射
-     * @param tenantId 租户ID
+     *
+     * @param tenantId    租户ID
      * @param environment 环境
      */
     @PostMapping("/mapping")
     public ResponseEntity<Map<String, Object>> updateTenantMapping(
             @RequestParam String tenantId,
             @RequestParam String environment) {
-        
+
         consulConfigService.updateTenantMapping(tenantId, environment);
-        
+
         Map<String, Object> result = new HashMap<>();
         result.put("success", true);
         result.put("message", "租户环境映射已更新");
@@ -56,23 +58,24 @@ public class TenantConfigController {
 
     /**
      * 删除租户环境映射
+     *
      * @param tenantId 租户ID
      */
     @DeleteMapping("/mapping/{tenantId}")
     public ResponseEntity<Map<String, Object>> deleteTenantMapping(
             @PathVariable String tenantId) {
-        
+
         Map<String, String> mapping = new HashMap<>(tenantProperties.getMapping());
         if (mapping.containsKey(tenantId)) {
             mapping.remove(tenantId);
-            
+
             // 更新本地配置
             tenantProperties.setMapping(mapping);
-            
+
             // 更新Consul配置
             try {
                 consulConfigService.migrateTenantMappingToConsul();
-                
+
                 Map<String, Object> result = new HashMap<>();
                 result.put("success", true);
                 result.put("message", "租户环境映射已删除");
@@ -94,14 +97,15 @@ public class TenantConfigController {
 
     /**
      * 更新默认环境
+     *
      * @param environment 默认环境
      */
     @PostMapping("/default-environment")
     public ResponseEntity<Map<String, Object>> updateDefaultEnvironment(
             @RequestParam String environment) {
-        
+
         consulConfigService.updateDefaultEnvironment(environment);
-        
+
         Map<String, Object> result = new HashMap<>();
         result.put("success", true);
         result.put("message", "默认环境已更新");
@@ -116,7 +120,7 @@ public class TenantConfigController {
     @PostMapping("/refresh")
     public ResponseEntity<Map<String, Object>> refreshConfig() {
         consulConfigService.loadConfigFromConsul();
-        
+
         Map<String, Object> result = new HashMap<>();
         result.put("success", true);
         result.put("message", "配置已刷新");

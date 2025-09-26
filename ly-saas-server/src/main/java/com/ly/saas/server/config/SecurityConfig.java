@@ -1,10 +1,9 @@
 package com.ly.saas.server.config;
 
 import com.ly.saas.server.filter.TenantRoutingFilter;
-import com.ly.saas.server.security.SaaSUserDetailsService;
-import com.ly.saas.shu.core.constant.Constants;
 import com.ly.saas.server.security.JwtAuthenticationEntryPoint;
 import com.ly.saas.server.security.JwtAuthenticationFilter;
+import com.ly.saas.server.security.SaaSUserDetailsService;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +14,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,12 +40,12 @@ public class SecurityConfig {
     @Resource
     private TenantRoutingFilter tenantRoutingFilter;
 
-    @Bean(Constants.PREFIX + "JwtAuthenticationFilter")
+    @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter();
     }
 
-    @Bean(Constants.PREFIX + "DaoAuthenticationProvider")
+    @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
@@ -53,7 +53,7 @@ public class SecurityConfig {
         return authProvider;
     }
 
-    @Bean(Constants.PREFIX + "AuthenticationManager")
+    @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }
@@ -63,15 +63,14 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean(Constants.PREFIX + "SecurityFilterChain")
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(contextPath + "/*/auth/**").permitAll()
-                        .requestMatchers(contextPath + "/*/test/**").permitAll()
+                        .requestMatchers(contextPath + "/auth/**").permitAll()
                         .anyRequest().authenticated()
                 );
 
