@@ -24,6 +24,17 @@ public class UserController {
     private UserService userService;
 
     /**
+     * 获取版本信息
+     *
+     * @return
+     */
+    @PreAuthorize("hasAuthority('user:read')")
+    @GetMapping("/getVersion")
+    public ResponseEntity<String> getVersion() {
+        return ResponseEntity.ok(Constants.PREFIX);
+    }
+
+    /**
      * 获取用户列表
      *
      * @param user     查询条件
