@@ -1,5 +1,6 @@
 package com.ly.saas.shu.api.controller;
 
+import com.ly.saas.common.config.TenantHolder;
 import com.ly.saas.shu.core.constant.Constants;
 import com.ly.saas.shu.core.entity.User;
 import com.ly.saas.shu.security.JwtTokenUtil;
@@ -67,7 +68,7 @@ public class AuthController {
         SaaSUserDetails saasUserDetails = (SaaSUserDetails) authentication.getPrincipal();
         User user = saasUserDetails.getUser();
         // 生成JWT Token
-        String token = jwtTokenUtil.generateToken(saasUserDetails, authRequest.getTenantId());
+        String token = jwtTokenUtil.generateToken(saasUserDetails, TenantHolder.getTenantCode());
         // 返回认证结果
         return ResponseEntity.ok(new AuthResponse(token, user));
     }

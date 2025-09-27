@@ -4,6 +4,7 @@ import com.ly.saas.wu.core.constant.Constants;
 import com.ly.saas.wu.mq.producer.TestMessageProducer;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +26,7 @@ public class TestMQController {
      * @param content 消息内容
      * @return 发送结果
      */
+    @PreAuthorize("hasAuthority('mq:send')")
     @GetMapping("/sync")
     public String testSyncSend(@RequestParam("content") String content) {
         return testMessageProducer.sendMessage(content).toString();
@@ -36,6 +38,7 @@ public class TestMQController {
      * @param content 消息内容
      * @return 提示信息
      */
+    @PreAuthorize("hasAuthority('mq:send')")
     @GetMapping("/async")
     public String testAsyncSend(@RequestParam("content") String content) {
         testMessageProducer.sendAsyncMessage(content);
@@ -48,6 +51,7 @@ public class TestMQController {
      * @param content 消息内容
      * @return 提示信息
      */
+    @PreAuthorize("hasAuthority('mq:send')")
     @GetMapping("/oneway")
     public String testOneWaySend(@RequestParam("content") String content) {
         testMessageProducer.sendOneWayMessage(content);

@@ -1,10 +1,10 @@
 package com.ly.saas.server.config;
 
-import com.ly.saas.server.constant.Constants;
 import com.ly.saas.server.filter.TenantRoutingFilter;
 import com.ly.saas.server.security.JwtAuthenticationEntryPoint;
 import com.ly.saas.server.security.JwtAuthenticationFilter;
 import com.ly.saas.server.security.SaaSUserDetailsService;
+import com.ly.saas.wei.core.constant.Constants;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -71,17 +71,10 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // 确保路径匹配正确，同时考虑上下文路径、环境前缀和API_PREFIX
-                        // 1. 基本登录路径
-                        .requestMatchers("/api/auth/login", "/api/shu/auth/**", "/api/wei/auth/**", "/api/wu/auth/**").permitAll()
-                        // 2. 带contextPath前缀的路径
-                        .requestMatchers(contextPath + "/api/auth/login", contextPath + "/api/shu/auth/**", contextPath + "/api/wei/auth/**", contextPath + "/api/wu/auth/**").permitAll()
-                        // 3. 带contextPath和环境前缀的路径（环境前缀可能会被TenantRoutingFilter添加）
-                        .requestMatchers(contextPath + "/*/api/auth/login", contextPath + "/*/api/shu/auth/**", contextPath + "/*/api/wei/auth/**", contextPath + "/*/api/wu/auth/**").permitAll()
-                        // 4. 带API_PREFIX的路径
-                        .requestMatchers(Constants.API_PREFIX + "/auth/**").permitAll()
-                        // 5. 各模块的登录路径
-                        .requestMatchers("/shu/auth/**", "/wei/auth/**", "/wu/auth/**").permitAll()
+                        .requestMatchers(
+                                com.ly.saas.wei.core.constant.Constants.API_PREFIX + "/auth/**",
+                                com.ly.saas.shu.core.constant.Constants.API_PREFIX + "/auth/**",
+                                com.ly.saas.wu.core.constant.Constants.API_PREFIX + "/auth/**").permitAll()
                         .anyRequest().authenticated()
                 );
 

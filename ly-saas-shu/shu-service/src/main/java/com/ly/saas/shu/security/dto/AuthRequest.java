@@ -21,9 +21,4 @@ public class AuthRequest {
     @NotBlank(message = "密码不能为空")
     private String password;
 
-    /**
-     * 租户ID
-     */
-    @NotBlank(message = "租户ID不能为空")
-    private String tenantId;
 }

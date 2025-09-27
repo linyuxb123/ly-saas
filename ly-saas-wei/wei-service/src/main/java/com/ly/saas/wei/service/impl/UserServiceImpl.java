@@ -62,7 +62,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(User::getUsername, username);
-        return getOne(queryWrapper);
+        User one = getOne(queryWrapper);
+        return one;
     }
 
     @Override
@@ -125,9 +126,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             // 模拟权限数据
             List<String> permissions = new ArrayList<>();
             if ("admin".equals(user.getUsername())) {
-                permissions.addAll(Arrays.asList("user:read", "user:write", "dept:read", "dept:write"));
+                permissions.addAll(Arrays.asList("user:read", "user:write", "dept:read", "dept:write", "mq:send"));
             } else {
-                permissions.addAll(Arrays.asList("user:read", "dept:read"));
+                permissions.addAll(Arrays.asList("user:read", "dept:read", "mq:send"));
             }
             user.setPermissions(permissions);
         }
